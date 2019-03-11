@@ -86,5 +86,6 @@ The exporter accepts the following command line flags:
 
 ## TODO
 
-[ ] Add overall capacity metrics
-[ ] Add optional per-IP metrics
+- [ ] Exit the exporter on startup (instead of scrape) if the API token variable isn't set
+- [ ] Add overall capacity metrics
+- [ ] Add optional per-IP metrics
