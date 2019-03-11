@@ -5,7 +5,6 @@ The exporter uses FlashBlade API version 1.2.
 ## Building
 
 ```
-make deps
 make build
 ```
 
