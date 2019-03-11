@@ -6,7 +6,7 @@ RUN mkdir /user && \
     echo 'fbexporter:x:1000:1000:fbexporter:/:' > /user/passwd && \
     echo 'fbexporter:x:1000:' > /user/group
 
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates git
 ENV CGO_ENABLED=0
 WORKDIR /src
 COPY ./ ./
