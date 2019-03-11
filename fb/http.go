@@ -34,9 +34,9 @@ func NewFlashbladeClient(host string, insecure bool) *FlashbladeClient {
 }
 
 func getAPITokenFromEnv() string {
-	authToken, ok := os.LookupEnv("FB_AUTH_TOKEN")
+	authToken, ok := os.LookupEnv("PUREFB_API")
 	if !ok {
-		log.Fatalln("No environment variable FB_AUTH_TOKEN found")
+		log.Fatalln("No environment variable PUREFB_API found")
 	}
 	return authToken
 }

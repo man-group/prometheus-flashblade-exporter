@@ -21,6 +21,9 @@ The exporter requires the name of the FlashBlade as a command-line argument:
 
 `flashblade_exporter <flashblade>`
 
+Pass in the token for API access as the environment variable `PUREFB_API`.  (An API token can be generated for
+the FlashBlade by using the `pureadmin` command after SSHing to the device as 'pureuser'.)
+
 The exporter accepts the following command line flags:
 
 | Flag       | Description                                                              | Default |
