@@ -1,3 +1,6 @@
+// Copyright (c) 2019 Hudson River Trading LLC
+// All rights reserved.
+
 package collector
 
 import (
@@ -26,8 +29,17 @@ func NewFlashbladeCollector(fbClient *fb.FlashbladeClient) *FlashbladeCollector 
 	arrayPerformanceCollector := NewArrayPerformanceCollector(fbClient)
 	bladesCollector := NewBladesCollector(fbClient)
 	filesystemsCollector := NewFilesystemsCollector(fbClient)
+	usageCollector := NewUsageCollector(fbClient)
+	fsPerformanceCollector := NewFSPerformanceCollector(fbClient)
 
-	subcollectors := []Subcollector{alertsCollector, arrayPerformanceCollector, bladesCollector, filesystemsCollector}
+	subcollectors := []Subcollector{
+		alertsCollector,
+		arrayPerformanceCollector,
+		bladesCollector,
+		filesystemsCollector,
+		usageCollector,
+		fsPerformanceCollector,
+	}
 
 	return &FlashbladeCollector{subcollectors: subcollectors}
 }

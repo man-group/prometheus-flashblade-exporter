@@ -1,3 +1,6 @@
+// Copyright (c) 2019 Hudson River Trading LLC
+// All rights reserved.
+
 package fb
 
 import (
@@ -21,16 +24,21 @@ type FlashbladeClient struct {
 
 func NewFlashbladeClient(host string, insecure bool) *FlashbladeClient {
 	client := &http.Client{}
+	var fb FlashbladeClient
+
 	if insecure {
 		transport := &http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		}
 		client = &http.Client{Transport: transport}
 	}
-	return &FlashbladeClient{
-		client: client,
-		Host:   host,
-	}
+
+	fb = FlashbladeClient{client: client, Host: host}
+
+	// Init x-auth-token
+	fb.refreshXAuthToken()
+
+	return &fb
 }
 
 func getAPITokenFromEnv() string {
