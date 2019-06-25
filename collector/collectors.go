@@ -24,10 +24,11 @@ type FlashbladeCollector struct {
 func NewFlashbladeCollector(fbClient *fb.FlashbladeClient) *FlashbladeCollector {
 	alertsCollector := NewAlertsCollector(fbClient)
 	arrayPerformanceCollector := NewArrayPerformanceCollector(fbClient)
+	arraySpaceCollector := NewArraySpaceCollector(fbClient)
 	bladesCollector := NewBladesCollector(fbClient)
 	filesystemsCollector := NewFilesystemsCollector(fbClient)
 
-	subcollectors := []Subcollector{alertsCollector, arrayPerformanceCollector, bladesCollector, filesystemsCollector}
+	subcollectors := []Subcollector{alertsCollector, arrayPerformanceCollector, arraySpaceCollector, bladesCollector, filesystemsCollector}
 
 	return &FlashbladeCollector{subcollectors: subcollectors}
 }
