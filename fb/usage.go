@@ -1,9 +1,6 @@
-// Copyright (c) 2019 Hudson River Trading LLC
-// All rights reserved.
-
 package fb
 
-import "github.com/prometheus/common/log"
+import "fmt"
 
 type UsageResponse struct {
 	Groups []UsageGroup
@@ -54,39 +51,33 @@ func (fbClient FlashbladeClient) Usage() (UsageResponse, error) {
 	err := fbClient.GetJSON(endpoint, nil, &filesystemsResponse)
 
 	if err != nil {
-		log.Errorf("Error while getting JSON on endpoint %s", endpoint, err)
+		fmt.Println("Error while getting JSON")
 		return UsageResponse{}, err
 	}
 
 	var (
 		usageResponseGroup []UsageGroup
 		usageResponseUser  []UsageUser
-		usageGroup UsageGroup
-		usageUser UsageUser
 	)
 	params := make(map[string]string)
 
 	for _, item := range filesystemsResponse.Items {
 		params["file_system_names"] = item.Name
 
+		usageResponseGroup = append(usageResponseGroup, UsageGroup{})
 		endpoint = "1.8/usage/groups"
-		err = fbClient.GetJSON(endpoint, params, &usageGroup)
-		if err != nil {
-			log.Errorf("Error while getting JSON on endpoint %s", endpoint, err)
-			return UsageResponse{}, err
-		}
-		usageResponseGroup = append(usageResponseGroup, usageGroup)
+		err = fbClient.GetJSON(endpoint, params, &(usageResponseGroup[len(usageResponseGroup)-1]))
 
-		endpoint = "1.8/usage/users"
-		err = fbClient.GetJSON(endpoint, params, &usageUser)
 		if err != nil {
-			log.Errorf("Error while getting JSON on endpoint %s", endpoint, err)
+			fmt.Println("Error while getting JSON")
 			return UsageResponse{}, err
 		}
-		
-		usageResponseUser = append(usageResponseUser, usageUser)
+
+		usageResponseUser = append(usageResponseUser, UsageUser{})
+		endpoint = "1.8/usage/users"
+		err = fbClient.GetJSON(endpoint, params, &(usageResponseUser)[len(usageResponseUser)-1])
 
 	}
 
-	return UsageResponse{usageResponseGroup, usageResponseUser}, nil
+	return UsageResponse{usageResponseGroup, usageResponseUser}, err
 }
