@@ -1,6 +1,8 @@
 # Pure FlashBlade Exporter for Prometheus
 
-Export Prometheus scrapable metrics from a Pure Storage FlashBlade. The exporter minimally requires FlashBlade API version 1.2.
+Export Prometheus scrapable metrics from a Pure Storage FlashBlade. 
+
+The exporter minimally requires FlashBlade API version 1.2.
 
 ## Building
 
