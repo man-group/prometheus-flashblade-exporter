@@ -84,10 +84,10 @@ The exporter accepts the following command line flags:
 ```
 
 ## Authors
-Prometheus FlashBlade Exporter has been under development at Man Group since 2019 and welcomes contributions.
+Under development since 2019
 
 * [Michael Captain](https://github.com/macaptain), Man Group
-* [Advait Bhatwdekar] (https://github.com/You-NeverKnow) Hudson River Trading LLC
+* [Advait Bhatwdekar](https://github.com/You-NeverKnow), Hudson River Trading LLC
 
 ## TODO
 
