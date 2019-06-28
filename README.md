@@ -128,7 +128,7 @@ Additionally, with `--filesystem-metrics`:
 ```
 
 ## Authors
-Under development since 2019
+Prometheus FlashBlade Exporter has been under development since 2019 and welcomes contributions.
 
 * [Michael Captain](https://github.com/macaptain), Man Group
 * [Advait Bhatwdekar](https://github.com/You-NeverKnow), Hudson River Trading LLC
