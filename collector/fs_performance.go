@@ -157,21 +157,21 @@ func (c FSPerformanceCollector) collect(ch chan<- prometheus.Metric) error {
 		ch <- prometheus.MustNewConstMetric(
 			c.UsecPerOtherOp,
 			prometheus.GaugeValue,
-			float64(stat.UsecPerOtherOp) / 1e6,
+			float64(stat.UsecPerOtherOp)/1e6,
 			stat.Name,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			c.UsecPerReadOp,
 			prometheus.GaugeValue,
-			float64(stat.UsecPerReadOp) / 1e6,
+			float64(stat.UsecPerReadOp)/1e6,
 			stat.Name,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			c.UsecPerWriteOp,
 			prometheus.GaugeValue,
-			float64(stat.UsecPerWriteOp) / 1000,
+			float64(stat.UsecPerWriteOp)/1000,
 			stat.Name,
 		)
 
