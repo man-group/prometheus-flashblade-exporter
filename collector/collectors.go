@@ -1,3 +1,6 @@
+// Copyright (C) 2019 by the authors in the project README.md
+// See the full license in the project LICENSE file.
+
 package collector
 
 import (
@@ -21,13 +24,25 @@ type FlashbladeCollector struct {
 	subcollectors []Subcollector
 }
 
-func NewFlashbladeCollector(fbClient *fb.FlashbladeClient) *FlashbladeCollector {
+func NewFlashbladeCollector(fbClient *fb.FlashbladeClient, fsMetricFlag bool) *FlashbladeCollector {
 	alertsCollector := NewAlertsCollector(fbClient)
 	arrayPerformanceCollector := NewArrayPerformanceCollector(fbClient)
 	bladesCollector := NewBladesCollector(fbClient)
 	filesystemsCollector := NewFilesystemsCollector(fbClient)
 
-	subcollectors := []Subcollector{alertsCollector, arrayPerformanceCollector, bladesCollector, filesystemsCollector}
+	subcollectors := []Subcollector{
+		alertsCollector,
+		arrayPerformanceCollector,
+		bladesCollector,
+		filesystemsCollector,
+	}
+
+	if fsMetricFlag {
+		usageCollector := NewUsageCollector(fbClient)
+		fsPerformanceCollector := NewFSPerformanceCollector(fbClient)
+	
+		subcollectors = append(subcollectors, usageCollector, fsPerformanceCollector)
+	}
 
 	return &FlashbladeCollector{subcollectors: subcollectors}
 }
