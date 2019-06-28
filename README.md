@@ -91,6 +91,12 @@ The exporter accepts the following command line flags:
 # TYPE flashblade_space_virtual_usage_bytes gauge
 ```
 
+## Authors
+Under development since 2019
+
+* [Michael Captain](https://github.com/macaptain), Man Group
+* [Advait Bhatwdekar](https://github.com/You-NeverKnow), Hudson River Trading LLC
+
 ## TODO
 
 - [ ] Exit the exporter on startup (instead of scrape) if the API token variable isn't set

@@ -1,3 +1,6 @@
+// Copyright (C) 2019 by the authors in the project README.md
+// See the full license in the project LICENSE file.
+
 package fb
 
 type BladesResponse struct {
