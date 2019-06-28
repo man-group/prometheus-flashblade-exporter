@@ -74,12 +74,12 @@ func (c UsageCollector) collect(ch chan<- prometheus.Metric) error {
 				prometheus.GaugeValue,
 				float64(data.Usage),
 				"group", data.Group.Name, strconv.FormatInt(int64(data.Group.Id), 10), data.FileSystem["name"])
-			
-			ch <- prometheus.MustNewConstMetric( 
+
+			ch <- prometheus.MustNewConstMetric(
 				c.Quota,
 				prometheus.GaugeValue,
 				float64(data.Quota),
-				"group", data.Group.Name, strconv.FormatInt(int64(data.Group.Id), 10), data.FileSystem["name"])	
+				"group", data.Group.Name, strconv.FormatInt(int64(data.Group.Id), 10), data.FileSystem["name"])
 		}
 	}
 	return nil

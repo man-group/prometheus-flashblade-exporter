@@ -1,6 +1,6 @@
 # Pure FlashBlade Exporter for Prometheus
 
-The exporter uses FlashBlade API version 1.2.
+Export Prometheus scrapable metrics from a Pure Storage FlashBlade. The exporter minimally requires FlashBlade API version 1.2.
 
 ## Building
 
@@ -20,21 +20,26 @@ The exporter requires the name of the FlashBlade as a command-line argument:
 
 `flashblade_exporter <flashblade>`
 
-Pass in the token for API access as the environment variable `PUREFB_API`.  (An API token can be generated for
+Pass in the token for API access as the environment variable `PUREFB_API`. (An API token can be generated for
 the FlashBlade by using the `pureadmin` command after SSHing to the device as 'pureuser'.)
 
 The exporter accepts the following command line flags:
 
-| Flag       | Description                                                              | Default |
-| ---------- | ------------------------------------------------------------------------ | ------- |
-| --port     | Port on which the exporter will bind to in order to serve up the metrics | 9130    |
-| --insecure | Disable SSL verification                                                 | false   |
+| Flag                 | Description                                                                                    | Default |
+| -------------------- | ---------------------------------------------------------------------------------------------- | ------- |
+| --port               | Port on which the exporter will bind to in order to serve up the metrics                       | 9130    |
+| --insecure           | Disable SSL verification                                                                       | false   |
+| --filesystem-metrics | Enable per-filesystem performance and user/group metrics (requires FlashBlade API version 1.8) | false   |
 
 
 ## Metrics
 
 * Filesystem usage (unique, virtual, snapshot and total)
 * Bandwidth, IOPS and latency for both read and write
+* Number of alerts of each severity
+* FlashBlade total capacity and usage
+* Usage statistics for each user and group per filesystem (with `--filesystem-metrics`)
+* Filesystem performance (with `--filesystem-metrics`)
 
 ```
 # HELP flashblade_alert_num_open Number of open alerts of each severity
@@ -91,14 +96,39 @@ The exporter accepts the following command line flags:
 # TYPE flashblade_space_virtual_usage_bytes gauge
 ```
 
+Additionally, with `--filesystem-metrics`:
+
+```
+# HELP flashblade_usagequota_memory_quota_bytes Quota of a user/group on a filesystem in bytes
+# TYPE flashblade_usagequota_memory_quota_bytes gauge
+# HELP flashblade_usagequota_memory_usage_bytes Usage of a user/group on a filesystem in bytes
+# TYPE flashblade_usagequota_memory_usage_bytes gauge
+# HELP flashblade_fs_performance_bytes_per_op Average operation size (read bytes+write bytes/(read ops+write ops))
+# TYPE flashblade_fs_performance_bytes_per_op gauge
+# HELP flashblade_fs_performance_bytes_per_read Average read size in bytes per read operation
+# TYPE flashblade_fs_performance_bytes_per_read gauge
+# HELP flashblade_fs_performance_bytes_per_write Average write size in bytes per write operation
+# TYPE flashblade_fs_performance_bytes_per_write gauge
+# HELP flashblade_fs_performance_non_read_write_operations_per_second All operations except read processed per second
+# TYPE flashblade_fs_performance_non_read_write_operations_per_second gauge
+# HELP flashblade_fs_performance_read_bytes_per_second Read byte requests processed per second
+# TYPE flashblade_fs_performance_read_bytes_per_second gauge
+# HELP flashblade_fs_performance_reads_per_second Read requests processed per second
+# TYPE flashblade_fs_performance_reads_per_second gauge
+# HELP flashblade_fs_performance_sec_per_non_read_write_op Average time, measured in seconds, that the array takes to process other operations
+# TYPE flashblade_fs_performance_sec_per_non_read_write_op gauge
+# HELP flashblade_fs_performance_sec_per_read_op Average time, measured in seconds, that the array takes to process a read request
+# TYPE flashblade_fs_performance_sec_per_read_op gauge
+# HELP flashblade_fs_performance_sec_per_write_op Average time, measured in seconds, that the array takes to process a write request
+# TYPE flashblade_fs_performance_sec_per_write_op gauge
+# HELP flashblade_fs_performance_write_bytes_per_second Write byte requests processed per second
+# TYPE flashblade_fs_performance_write_bytes_per_second gauge
+# HELP flashblade_fs_performance_writes_per_second Write requests processed per second
+# TYPE flashblade_fs_performance_writes_per_second gauge
+```
+
 ## Authors
 Under development since 2019
 
 * [Michael Captain](https://github.com/macaptain), Man Group
 * [Advait Bhatwdekar](https://github.com/You-NeverKnow), Hudson River Trading LLC
-
-## TODO
-
-- [ ] Exit the exporter on startup (instead of scrape) if the API token variable isn't set
-- [ ] Add overall capacity metrics
-- [ ] Add optional per-IP metrics
