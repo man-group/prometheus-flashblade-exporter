@@ -22,6 +22,4 @@ EXPOSE 9130
 
 USER fbexporter:fbexporter
 
-# Run the compiled binary.
 ENTRYPOINT ["/usr/bin/prometheus-flashblade-exporter"]
-

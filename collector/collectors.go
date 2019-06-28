@@ -27,12 +27,14 @@ type FlashbladeCollector struct {
 func NewFlashbladeCollector(fbClient *fb.FlashbladeClient, fsMetricFlag bool) *FlashbladeCollector {
 	alertsCollector := NewAlertsCollector(fbClient)
 	arrayPerformanceCollector := NewArrayPerformanceCollector(fbClient)
+	arraySpaceCollector := NewArraySpaceCollector(fbClient)
 	bladesCollector := NewBladesCollector(fbClient)
 	filesystemsCollector := NewFilesystemsCollector(fbClient)
 
 	subcollectors := []Subcollector{
 		alertsCollector,
 		arrayPerformanceCollector,
+		arraySpaceCollector,
 		bladesCollector,
 		filesystemsCollector,
 	}
@@ -40,7 +42,7 @@ func NewFlashbladeCollector(fbClient *fb.FlashbladeClient, fsMetricFlag bool) *F
 	if fsMetricFlag {
 		usageCollector := NewUsageCollector(fbClient)
 		fsPerformanceCollector := NewFSPerformanceCollector(fbClient)
-	
+
 		subcollectors = append(subcollectors, usageCollector, fsPerformanceCollector)
 	}
 

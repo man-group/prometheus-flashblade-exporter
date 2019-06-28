@@ -37,12 +37,8 @@ The exporter accepts the following command line flags:
 * Bandwidth, IOPS and latency for both read and write
 
 ```
-# HELP flashblade_alert_num_critical_alerts Number of open critical severity alerts
-# TYPE flashblade_alert_num_critical_alerts gauge
-# HELP flashblade_alert_num_info_alerts Number of open info severity alerts
-# TYPE flashblade_alert_num_info_alerts gauge
-# HELP flashblade_alert_num_warning_alerts Number of open warning severity alerts
-# TYPE flashblade_alert_num_warning_alerts gauge
+# HELP flashblade_alert_num_open Number of open alerts of each severity
+# TYPE flashblade_alert_num_open gauge
 # HELP flashblade_blade_num_healthy_blades Number of blades in healthy status
 # TYPE flashblade_blade_num_healthy_blades gauge
 # HELP flashblade_blade_num_unhealthy_blades Number of blades in a non-healthy status
@@ -81,6 +77,18 @@ The exporter accepts the following command line flags:
 # TYPE flashblade_perf_usec_per_write_op gauge
 # HELP flashblade_perf_writes_per_sec Write requests processed per second
 # TYPE flashblade_perf_writes_per_sec gauge
+# HELP flashblade_space_capacity_bytes Usable capacity in bytes
+# TYPE flashblade_space_capacity_bytes gauge
+# HELP flashblade_space_data_reduction Reduction of data
+# TYPE flashblade_space_data_reduction gauge
+# HELP flashblade_space_snapshot_usage_bytes Physical usage by snapshots, non-unique
+# TYPE flashblade_space_snapshot_usage_bytes gauge
+# HELP flashblade_space_total_usage_bytes Total physical usage (including snapshots) in bytes
+# TYPE flashblade_space_total_usage_bytes gauge
+# HELP flashblade_space_unique_usage_bytes Physical usage in bytes
+# TYPE flashblade_space_unique_usage_bytes gauge
+# HELP flashblade_space_virtual_usage_bytes Usage in bytes
+# TYPE flashblade_space_virtual_usage_bytes gauge
 ```
 
 ## Authors
