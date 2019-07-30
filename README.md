@@ -134,3 +134,4 @@ Prometheus FlashBlade Exporter has been under development since 2019 and welcome
 
 * [Michael Captain](https://github.com/macaptain), Man Group
 * [Advait Bhatwdekar](https://github.com/You-NeverKnow), Hudson River Trading LLC
+* [Jeff Patti](https://github.com/jepatti), Man Group

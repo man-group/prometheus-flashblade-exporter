@@ -30,6 +30,7 @@ func NewFlashbladeCollector(fbClient *fb.FlashbladeClient, fsMetricFlag bool) *F
 	arraySpaceCollector := NewArraySpaceCollector(fbClient)
 	bladesCollector := NewBladesCollector(fbClient)
 	filesystemsCollector := NewFilesystemsCollector(fbClient)
+	s3BucketsCollector := NewS3BucketsCollector(fbClient)
 
 	subcollectors := []Subcollector{
 		alertsCollector,
@@ -37,6 +38,7 @@ func NewFlashbladeCollector(fbClient *fb.FlashbladeClient, fsMetricFlag bool) *F
 		arraySpaceCollector,
 		bladesCollector,
 		filesystemsCollector,
+		s3BucketsCollector,
 	}
 
 	if fsMetricFlag {
