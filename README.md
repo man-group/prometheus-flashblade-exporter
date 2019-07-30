@@ -2,7 +2,7 @@
 
 Export Prometheus scrapable metrics from a Pure Storage FlashBlade. 
 
-The exporter minimally requires FlashBlade API version 1.2.
+The exporter minimally requires FlashBlade API version 1.2 (and version 1.3 for S3 metrics).
 
 ## Building
 
@@ -37,6 +37,7 @@ The exporter accepts the following command line flags:
 ## Metrics
 
 * Filesystem usage (unique, virtual, snapshot and total)
+* S3 bucket usage (unique, virtual, snapshot, total and number of objects)
 * Bandwidth, IOPS and latency for both read and write
 * Number of alerts of each severity
 * FlashBlade total capacity and usage
@@ -84,6 +85,18 @@ The exporter accepts the following command line flags:
 # TYPE flashblade_perf_usec_per_write_op gauge
 # HELP flashblade_perf_writes_per_sec Write requests processed per second
 # TYPE flashblade_perf_writes_per_sec gauge
+# HELP flashblade_s3_data_reduction Reduction of data
+# TYPE flashblade_s3_data_reduction gauge
+# HELP flashblade_s3_object_count The number of object within the bucket.
+# TYPE flashblade_s3_object_count gauge
+# HELP flashblade_s3_snapshot_usage_bytes Physical usage by snapshots, non-unique
+# TYPE flashblade_s3_snapshot_usage_bytes gauge
+# HELP flashblade_s3_total_usage_bytes Total physical usage (including snapshots) in bytes
+# TYPE flashblade_s3_total_usage_bytes gauge
+# HELP flashblade_s3_unique_usage_bytes Physical usage in bytes
+# TYPE flashblade_s3_unique_usage_bytes gauge
+# HELP flashblade_s3_virtual_usage_bytes Usage in bytes
+# TYPE flashblade_s3_virtual_usage_bytes gauge
 # HELP flashblade_space_capacity_bytes Usable capacity in bytes
 # TYPE flashblade_space_capacity_bytes gauge
 # HELP flashblade_space_data_reduction Reduction of data

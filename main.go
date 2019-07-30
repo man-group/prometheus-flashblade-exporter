@@ -35,7 +35,7 @@ func listen() {
 }
 
 func main() {
-	kingpin.Version("0.2.0")
+	kingpin.Version("0.3.0")
 	kingpin.Parse()
 	fbClient := fb.NewFlashbladeClient(*flashbladeFlag, *insecureFlag)
 	fbCollector := collector.NewFlashbladeCollector(fbClient, *fsMetricFlag)
