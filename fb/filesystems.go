@@ -22,14 +22,6 @@ type FilesystemsItem struct {
 	TimeRemaining              int         `json:"time_remaining"`
 }
 
-type Space struct {
-	Virtual       int     `json:"virtual"`
-	DataReduction float64 `json:"data_reduction"`
-	Unique        int     `json:"unique"`
-	Snapshots     int     `json:"snapshots"`
-	TotalPhysical int     `json:"total_physical"`
-}
-
 func (fbClient FlashbladeClient) Filesystems() (FilesystemsResponse, error) {
 	endpoint := "/1.2/file-systems"
 	var filesystemsResponse FilesystemsResponse
