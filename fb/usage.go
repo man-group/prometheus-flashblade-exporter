@@ -3,7 +3,10 @@
 
 package fb
 
-import "fmt"
+import (
+	"fmt"
+	"path"
+)
 
 type UsageResponse struct {
 	Groups []UsageGroup
@@ -49,7 +52,7 @@ type NameID struct {
 }
 
 func (fbClient FlashbladeClient) Usage() (UsageResponse, error) {
-	endpoint := "1.8/file-systems"
+	endpoint := path.Join(fbClient.ApiVersion, "/file-systems")
 	var filesystemsResponse FilesystemsResponse
 	err := fbClient.GetJSON(endpoint, nil, &filesystemsResponse)
 
@@ -68,7 +71,8 @@ func (fbClient FlashbladeClient) Usage() (UsageResponse, error) {
 		params["file_system_names"] = item.Name
 
 		usageResponseGroup = append(usageResponseGroup, UsageGroup{})
-		endpoint = "1.8/usage/groups"
+		endpoint = path.Join(fbClient.ApiVersion, "/usage/groups")
+
 		err = fbClient.GetJSON(endpoint, params, &(usageResponseGroup[len(usageResponseGroup)-1]))
 
 		if err != nil {
@@ -77,7 +81,7 @@ func (fbClient FlashbladeClient) Usage() (UsageResponse, error) {
 		}
 
 		usageResponseUser = append(usageResponseUser, UsageUser{})
-		endpoint = "1.8/usage/users"
+		endpoint = path.Join(fbClient.ApiVersion, "/usage/users")
 		err = fbClient.GetJSON(endpoint, params, &(usageResponseUser)[len(usageResponseUser)-1])
 
 	}

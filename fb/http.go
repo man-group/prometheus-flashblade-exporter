@@ -18,8 +18,13 @@ import (
 var xAuthToken string
 
 type FlashbladeClient struct {
-	Host   string
-	client *http.Client
+	Host       string
+	client     *http.Client
+	ApiVersion string
+}
+
+type Version struct {
+	Versions []string `json:"versions"`
 }
 
 func NewFlashbladeClient(host string, insecure bool) *FlashbladeClient {
@@ -37,8 +42,21 @@ func NewFlashbladeClient(host string, insecure bool) *FlashbladeClient {
 
 	// Init x-auth-token
 	fb.refreshXAuthToken()
+	fb.ApiVersion = fb.getAPIVersion()
 
 	return &fb
+}
+
+func (fbClient *FlashbladeClient) getAPIVersion() string {
+	var (
+		params map[string]string
+		v      Version
+	)
+	err := fbClient.GetJSON("api_version", params, &v)
+	if err != nil {
+		log.Fatalln("Failed to get supported API-versions. Error =", err)
+	}
+	return v.Versions[len(v.Versions)-1]
 }
 
 func getAPITokenFromEnv() string {
