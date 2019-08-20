@@ -20,12 +20,12 @@ type PaginationData struct {
 
 type UsageGroup struct {
 	Items          []UsageItemGroup `json:"items"`
-	PaginationInfo PaginationData   `json:"pagination_info"`
+	//PaginationInfo PaginationData   `json:"pagination_info"`
 }
 
 type UsageUser struct {
 	Items          []UsageItemUser `json:"items"`
-	PaginationInfo PaginationData  `json:"pagination_info"`
+	//PaginationInfo PaginationData  `json:"pagination_info"`
 }
 
 type UsageItemGroup struct {
