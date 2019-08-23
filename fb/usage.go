@@ -5,7 +5,6 @@ package fb
 
 import (
 	"fmt"
-	"path"
 )
 
 type UsageResponse struct {
@@ -20,12 +19,12 @@ type PaginationData struct {
 
 type UsageGroup struct {
 	Items          []UsageItemGroup `json:"items"`
-	//PaginationInfo PaginationData   `json:"pagination_info"`
+	PaginationInfo PaginationData   `json:"pagination_info"`
 }
 
 type UsageUser struct {
 	Items          []UsageItemUser `json:"items"`
-	//PaginationInfo PaginationData  `json:"pagination_info"`
+	PaginationInfo PaginationData  `json:"pagination_info"`
 }
 
 type UsageItemGroup struct {
@@ -52,7 +51,7 @@ type NameID struct {
 }
 
 func (fbClient FlashbladeClient) Usage() (UsageResponse, error) {
-	endpoint := path.Join(fbClient.ApiVersion, "/file-systems")
+	endpoint := "file-systems"
 	var filesystemsResponse FilesystemsResponse
 	err := fbClient.GetJSON(endpoint, nil, &filesystemsResponse)
 
@@ -71,7 +70,7 @@ func (fbClient FlashbladeClient) Usage() (UsageResponse, error) {
 		params["file_system_names"] = item.Name
 
 		usageResponseGroup = append(usageResponseGroup, UsageGroup{})
-		endpoint = path.Join(fbClient.ApiVersion, "/usage/groups")
+		endpoint = "usage/groups"
 
 		err = fbClient.GetJSON(endpoint, params, &(usageResponseGroup[len(usageResponseGroup)-1]))
 
@@ -81,9 +80,8 @@ func (fbClient FlashbladeClient) Usage() (UsageResponse, error) {
 		}
 
 		usageResponseUser = append(usageResponseUser, UsageUser{})
-		endpoint = path.Join(fbClient.ApiVersion, "/usage/users")
+		endpoint = "usage/users"
 		err = fbClient.GetJSON(endpoint, params, &(usageResponseUser)[len(usageResponseUser)-1])
-
 	}
 
 	return UsageResponse{usageResponseGroup, usageResponseUser}, err

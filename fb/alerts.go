@@ -26,7 +26,7 @@ type AlertsItem struct {
 }
 
 func (fbClient FlashbladeClient) OpenAlerts() (AlertsResponse, error) {
-	endpoint := "/1.2/alerts"
+	endpoint := "alerts"
 	var alertsResponse AlertsResponse
 	params := make(map[string]string)
 	params["filter"] = "state='open'"

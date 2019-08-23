@@ -3,8 +3,6 @@
 
 package fb
 
-import "path"
-
 type FSPerformanceResponse struct {
 	Items []FSPerformanceItem `json:"items"`
 }
@@ -26,7 +24,7 @@ type FSPerformanceItem struct {
 }
 
 func (fbClient FlashbladeClient) FSPerformance() (FSPerformanceResponse, error) {
-	endpoint := path.Join(fbClient.ApiVersion, "/file-systems/performance")
+	endpoint := "file-systems/performance"
 
 	params := make(map[string]string)
 	params["protocol"] = "nfs" // Only NFS supported as of API 1.8

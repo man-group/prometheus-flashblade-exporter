@@ -90,7 +90,7 @@ func (fbClient *FlashbladeClient) refreshXAuthToken() {
 
 func (fbClient *FlashbladeClient) urlForEndpoint(endpoint string) string {
 	u, _ := url.Parse(fmt.Sprintf("https://%s/api", fbClient.Host))
-	u.Path = path.Join(u.Path, endpoint)
+	u.Path = path.Join(u.Path, fbClient.ApiVersion, endpoint)
 	return u.String()
 }
 
