@@ -141,7 +141,10 @@ func (fbClient *FlashbladeClient) Get(endpoint string, params map[string]string)
 		if resp.StatusCode == http.StatusForbidden {
 			log.Fatalln("Couldn't authenticate with the given token")
 		}
+	} else if resp.StatusCode != 200 {
+		log.Printf("Failed GET with status %d for %v", resp.StatusCode, resp.Request.URL.String())
 	}
+
 	return resp
 }
 
