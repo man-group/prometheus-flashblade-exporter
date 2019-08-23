@@ -13,6 +13,7 @@ import (
 	"net/url"
 	"os"
 	"path"
+	"strconv"
 )
 
 var xAuthToken string
@@ -27,7 +28,7 @@ type Version struct {
 	Versions []string `json:"versions"`
 }
 
-func NewFlashbladeClient(host string, insecure bool) *FlashbladeClient {
+func NewFlashbladeClient(host string, insecure bool, version string) *FlashbladeClient {
 	client := &http.Client{}
 	var fb FlashbladeClient
 
@@ -42,12 +43,11 @@ func NewFlashbladeClient(host string, insecure bool) *FlashbladeClient {
 
 	// Init x-auth-token
 	fb.refreshXAuthToken()
-	fb.ApiVersion = fb.getAPIVersion()
-
+	fb.ApiVersion = fb.getAPIVersion(version)
 	return &fb
 }
 
-func (fbClient *FlashbladeClient) getAPIVersion() string {
+func (fbClient *FlashbladeClient) getAPIVersion(selectedVersion string) string {
 	var (
 		params map[string]string
 		v      Version
@@ -56,7 +56,26 @@ func (fbClient *FlashbladeClient) getAPIVersion() string {
 	if err != nil {
 		log.Fatalln("Failed to get supported API-versions. Error =", err)
 	}
-	return v.Versions[len(v.Versions)-1]
+
+	latestVersion := v.Versions[len(v.Versions)-1]
+
+	latest, err := strconv.ParseFloat(latestVersion, 32)
+	if err != nil {
+		log.Fatalf("Couldn't convert string to float. Err =", err)
+	}
+
+	selected, err := strconv.ParseFloat(selectedVersion, 32)
+	if err != nil {
+		log.Fatalf("Couldn't convert string to float. Err =", err)
+	}
+
+	apiVersion := strconv.FormatFloat(selected, 'f', -1, 32)
+
+	if latest < selected {
+		apiVersion = strconv.FormatFloat(latest, 'f', -1, 32)
+	}
+
+	return apiVersion
 }
 
 func getAPITokenFromEnv() string {

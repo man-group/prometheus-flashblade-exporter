@@ -19,6 +19,7 @@ var (
 	portFlag       = kingpin.Flag("port", "Port to listen on.").Short('p').Default("9130").String()
 	fsMetricFlag   = kingpin.Flag("filesystem-metrics", "Export filesystem and usage data metrics for each user and group.").Default("false").Bool()
 	insecureFlag   = kingpin.Flag("insecure", "Disable the verification of the SSL certificate").Default("false").Bool()
+	apiVersionFlag = kingpin.Flag("apiVersion", "API version to query the flashblade").Default("1.7").String()
 )
 
 func init() {
@@ -37,7 +38,7 @@ func listen() {
 func main() {
 	kingpin.Version("0.3.0")
 	kingpin.Parse()
-	fbClient := fb.NewFlashbladeClient(*flashbladeFlag, *insecureFlag)
+	fbClient := fb.NewFlashbladeClient(*flashbladeFlag, *insecureFlag, *apiVersionFlag)
 	fbCollector := collector.NewFlashbladeCollector(fbClient, *fsMetricFlag)
 	prometheus.MustRegister(fbCollector)
 	listen()
