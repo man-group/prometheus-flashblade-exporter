@@ -14,6 +14,7 @@ import (
 	"os"
 	"path"
 	"strconv"
+	"strings"
 )
 
 var xAuthToken string
@@ -59,23 +60,36 @@ func (fbClient *FlashbladeClient) getAPIVersion(selectedVersion string) string {
 
 	latestVersion := v.Versions[len(v.Versions)-1]
 
-	latest, err := strconv.ParseFloat(latestVersion, 32)
-	if err != nil {
-		log.Fatalf("Couldn't convert string to float. Err =", err)
-	}
+	latestMajorVersion, latestMinorVersion := getVersionsToCompare(latestVersion)
+	selectedMajorVersion, selectedMinorVersion := getVersionsToCompare(selectedVersion)
 
-	selected, err := strconv.ParseFloat(selectedVersion, 32)
-	if err != nil {
-		log.Fatalf("Couldn't convert string to float. Err =", err)
-	}
+	apiVersion := selectedVersion
 
-	apiVersion := strconv.FormatFloat(selected, 'f', -1, 32)
-
-	if latest < selected {
-		apiVersion = strconv.FormatFloat(latest, 'f', -1, 32)
+	if latestMajorVersion < selectedMajorVersion {
+		apiVersion = latestVersion
+	} else if (latestMajorVersion == selectedMajorVersion) && (latestMinorVersion < selectedMinorVersion) {
+		apiVersion = latestVersion
 	}
 
 	return apiVersion
+}
+
+func getVersionsToCompare(versionStr string) (int64, int64) {
+	decimal := strings.Split(versionStr, ".")
+	intPart, err := strconv.ParseInt(decimal[0], 10, 32)
+
+	if err != nil {
+		log.Fatalf("Couldn't convert string to int. Err =", err)
+	}
+
+	fracPart, err := strconv.ParseInt(decimal[1], 10, 16)
+
+	if err != nil {
+		log.Fatalf("Couldn't convert string to int. Err =", err)
+	}
+
+	return intPart, fracPart
+
 }
 
 func getAPITokenFromEnv() string {

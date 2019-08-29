@@ -19,7 +19,7 @@ var (
 	portFlag       = kingpin.Flag("port", "Port to listen on.").Short('p').Default("9130").String()
 	fsMetricFlag   = kingpin.Flag("filesystem-metrics", "Export filesystem and usage data metrics for each user and group.").Default("false").Bool()
 	insecureFlag   = kingpin.Flag("insecure", "Disable the verification of the SSL certificate").Default("false").Bool()
-	apiVersionFlag = kingpin.Flag("apiVersion", "API version to query the flashblade").Default("1.7").String()
+	apiVersionFlag = kingpin.Flag("api-version", "API version to query the flashblade").Default("1.7").String()
 )
 
 func init() {
