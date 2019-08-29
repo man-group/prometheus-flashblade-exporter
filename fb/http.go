@@ -60,8 +60,8 @@ func (fbClient *FlashbladeClient) getAPIVersion(selectedVersion string) string {
 
 	latestVersion := v.Versions[len(v.Versions)-1]
 
-	latestMajorVersion, latestMinorVersion := getVersionsToCompare(latestVersion)
-	selectedMajorVersion, selectedMinorVersion := getVersionsToCompare(selectedVersion)
+	latestMajorVersion, latestMinorVersion := splitDecimal(latestVersion)
+	selectedMajorVersion, selectedMinorVersion := splitDecimal(selectedVersion)
 
 	apiVersion := selectedVersion
 
@@ -74,7 +74,7 @@ func (fbClient *FlashbladeClient) getAPIVersion(selectedVersion string) string {
 	return apiVersion
 }
 
-func getVersionsToCompare(versionStr string) (int64, int64) {
+func splitDecimal(versionStr string) (int64, int64) {
 	decimal := strings.Split(versionStr, ".")
 	intPart, err := strconv.ParseInt(decimal[0], 10, 32)
 
