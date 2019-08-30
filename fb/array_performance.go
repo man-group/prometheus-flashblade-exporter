@@ -24,7 +24,7 @@ type ArrayPerformanceItem struct {
 }
 
 func (fbClient FlashbladeClient) ArrayPerformance() (ArrayPerformanceResponse, error) {
-	endpoint := "/1.2/arrays/performance"
+	endpoint := "arrays/performance"
 	var arrayPerformanceResponse ArrayPerformanceResponse
 	err := fbClient.GetJSON(endpoint, nil, &arrayPerformanceResponse)
 	return arrayPerformanceResponse, err

@@ -13,16 +13,23 @@ import (
 	"net/url"
 	"os"
 	"path"
+	"strconv"
+	"strings"
 )
 
 var xAuthToken string
 
 type FlashbladeClient struct {
-	Host   string
-	client *http.Client
+	Host       string
+	client     *http.Client
+	ApiVersion string
 }
 
-func NewFlashbladeClient(host string, insecure bool) *FlashbladeClient {
+type Version struct {
+	Versions []string `json:"versions"`
+}
+
+func NewFlashbladeClient(host string, insecure bool, version string) *FlashbladeClient {
 	client := &http.Client{}
 	var fb FlashbladeClient
 
@@ -37,8 +44,52 @@ func NewFlashbladeClient(host string, insecure bool) *FlashbladeClient {
 
 	// Init x-auth-token
 	fb.refreshXAuthToken()
-
+	fb.ApiVersion = fb.getAPIVersion(version)
 	return &fb
+}
+
+func (fbClient *FlashbladeClient) getAPIVersion(selectedVersion string) string {
+	var (
+		params map[string]string
+		v      Version
+	)
+	err := fbClient.GetJSON("api_version", params, &v)
+	if err != nil {
+		log.Fatalln("Failed to get supported API-versions. Error =", err)
+	}
+
+	latestVersion := v.Versions[len(v.Versions)-1]
+
+	latestMajorVersion, latestMinorVersion := splitDecimal(latestVersion)
+	selectedMajorVersion, selectedMinorVersion := splitDecimal(selectedVersion)
+
+	apiVersion := selectedVersion
+
+	if latestMajorVersion < selectedMajorVersion {
+		apiVersion = latestVersion
+	} else if (latestMajorVersion == selectedMajorVersion) && (latestMinorVersion < selectedMinorVersion) {
+		apiVersion = latestVersion
+	}
+
+	return apiVersion
+}
+
+func splitDecimal(versionStr string) (int64, int64) {
+	decimal := strings.Split(versionStr, ".")
+	intPart, err := strconv.ParseInt(decimal[0], 10, 32)
+
+	if err != nil {
+		log.Fatalf("Couldn't convert string to int. Err =", err)
+	}
+
+	fracPart, err := strconv.ParseInt(decimal[1], 10, 16)
+
+	if err != nil {
+		log.Fatalf("Couldn't convert string to int. Err =", err)
+	}
+
+	return intPart, fracPart
+
 }
 
 func getAPITokenFromEnv() string {
@@ -72,7 +123,7 @@ func (fbClient *FlashbladeClient) refreshXAuthToken() {
 
 func (fbClient *FlashbladeClient) urlForEndpoint(endpoint string) string {
 	u, _ := url.Parse(fmt.Sprintf("https://%s/api", fbClient.Host))
-	u.Path = path.Join(u.Path, endpoint)
+	u.Path = path.Join(u.Path, fbClient.ApiVersion, endpoint)
 	return u.String()
 }
 
@@ -104,7 +155,10 @@ func (fbClient *FlashbladeClient) Get(endpoint string, params map[string]string)
 		if resp.StatusCode == http.StatusForbidden {
 			log.Fatalln("Couldn't authenticate with the given token")
 		}
+	} else if resp.StatusCode != 200 {
+		log.Printf("Failed GET with status %d for %v", resp.StatusCode, resp.Request.URL.String())
 	}
+
 	return resp
 }
 

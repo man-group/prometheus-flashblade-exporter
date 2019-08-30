@@ -19,7 +19,7 @@ type BucketItem struct {
 }
 
 func (fbClient FlashbladeClient) S3Buckets() (S3BucketsResponse, error) {
-	endpoint := "/1.3/buckets"
+	endpoint := "buckets"
 	var s3BucketsResponse S3BucketsResponse
 	err := fbClient.GetJSON(endpoint, nil, &s3BucketsResponse)
 	return s3BucketsResponse, err

@@ -23,7 +23,7 @@ type FilesystemsItem struct {
 }
 
 func (fbClient FlashbladeClient) Filesystems() (FilesystemsResponse, error) {
-	endpoint := "/1.2/file-systems"
+	endpoint := "file-systems"
 	var filesystemsResponse FilesystemsResponse
 	err := fbClient.GetJSON(endpoint, nil, &filesystemsResponse)
 	return filesystemsResponse, err

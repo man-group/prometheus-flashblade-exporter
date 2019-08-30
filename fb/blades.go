@@ -17,7 +17,7 @@ type BladesItem struct {
 }
 
 func (fbClient FlashbladeClient) Blades() (BladesResponse, error) {
-	endpoint := "/1.2/blades"
+	endpoint := "blades"
 	var bladesResponse BladesResponse
 	err := fbClient.GetJSON(endpoint, nil, &bladesResponse)
 	return bladesResponse, err

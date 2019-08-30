@@ -16,7 +16,7 @@ type ArraySpaceItem struct {
 }
 
 func (fbClient FlashbladeClient) ArraySpace() (ArraySpaceResponse, error) {
-	endpoint := "/1.2/arrays/space"
+	endpoint := "arrays/space"
 	var arraySpaceResponse ArraySpaceResponse
 	err := fbClient.GetJSON(endpoint, nil, &arraySpaceResponse)
 	return arraySpaceResponse, err
