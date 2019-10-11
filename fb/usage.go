@@ -5,6 +5,7 @@ package fb
 
 import (
 	"fmt"
+	"regexp"
 )
 
 type UsageResponse struct {
@@ -50,10 +51,25 @@ type NameID struct {
 	Name string `json:"name"`
 }
 
-func (fbClient FlashbladeClient) Usage() (UsageResponse, error) {
+func filterFilesystems(vs []FilesystemsItem, regexMatch string) []FilesystemsItem {
+    vsf := make([]FilesystemsItem, 0)
+    for _, v := range vs {
+        matched, _ := regexp.MatchString(regexMatch, v.Name)
+        if matched {
+            vsf = append(vsf, v)
+        }
+    }
+    return vsf
+}
+
+// With the default value of fsFilterFlag, this function makes a call for every filesystem, which
+// can take a significant amount of time. This can be limited with the
+// --filesystem-filter-regexp flag.
+func (fbClient FlashbladeClient) Usage(fsFilterFlag string) (UsageResponse, error) {
 	endpoint := "file-systems"
 	var filesystemsResponse FilesystemsResponse
 	err := fbClient.GetJSON(endpoint, nil, &filesystemsResponse)
+	filteredFs := filterFilesystems(filesystemsResponse.Items, fsFilterFlag)
 
 	if err != nil {
 		fmt.Println("Error while getting JSON")
@@ -65,8 +81,7 @@ func (fbClient FlashbladeClient) Usage() (UsageResponse, error) {
 		usageResponseUser  []UsageUser
 	)
 	params := make(map[string]string)
-
-	for _, item := range filesystemsResponse.Items {
+	for _, item := range filteredFs {
 		params["file_system_names"] = item.Name
 
 		usageResponseGroup = append(usageResponseGroup, UsageGroup{})
