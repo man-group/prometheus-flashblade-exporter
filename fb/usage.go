@@ -51,7 +51,7 @@ type NameID struct {
 	Name string `json:"name"`
 }
 
-func FilterFilesystems(vs []FilesystemsItem, regexMatch string) []FilesystemsItem {
+func filterFilesystems(vs []FilesystemsItem, regexMatch string) []FilesystemsItem {
     vsf := make([]FilesystemsItem, 0)
     for _, v := range vs {
         matched, _ := regexp.MatchString(regexMatch, v.Name)
@@ -62,11 +62,13 @@ func FilterFilesystems(vs []FilesystemsItem, regexMatch string) []FilesystemsIte
     return vsf
 }
 
-func (fbClient FlashbladeClient) Usage(fsLimitFlag string) (UsageResponse, error) {
+// By default this function makes a call for every filesystem, which can take a significant amount
+// of time. This can be limited with the --filesystem-filter-regexp flag.
+func (fbClient FlashbladeClient) Usage(fsFilterFlag string) (UsageResponse, error) {
 	endpoint := "file-systems"
 	var filesystemsResponse FilesystemsResponse
 	err := fbClient.GetJSON(endpoint, nil, &filesystemsResponse)
-	filteredFs := FilterFilesystems(filesystemsResponse.Items, fsLimitFlag)
+	filteredFs := filterFilesystems(filesystemsResponse.Items, fsFilterFlag)
 
 	if err != nil {
 		fmt.Println("Error while getting JSON")

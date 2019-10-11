@@ -13,17 +13,17 @@ import (
 
 type UsageCollector struct {
 	fbClient *fb.FlashbladeClient
-	fsLimitFlag string
+	fsFilterFlag string
 	Usage    *prometheus.Desc
 	Quota    *prometheus.Desc
 }
 
-func NewUsageCollector(fbClient *fb.FlashbladeClient, fsLimitFlag string) *UsageCollector {
+func NewUsageCollector(fbClient *fb.FlashbladeClient, fsFilterFlag string) *UsageCollector {
 	const subsystem = "usagequota"
 
 	return &UsageCollector{
 		fbClient: fbClient,
-		fsLimitFlag: fsLimitFlag,
+		fsFilterFlag: fsFilterFlag,
 		Usage: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, subsystem, "memory_usage_bytes"),
 			"Usage of a user/group on a filesystem in bytes",
@@ -46,7 +46,7 @@ func (c UsageCollector) Collect(ch chan<- prometheus.Metric) {
 }
 
 func (c UsageCollector) collect(ch chan<- prometheus.Metric) error {
-	usage, err := c.fbClient.Usage(c.fsLimitFlag)
+	usage, err := c.fbClient.Usage(c.fsFilterFlag)
 	if err != nil {
 		return err
 	}

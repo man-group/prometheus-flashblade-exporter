@@ -27,12 +27,12 @@ the FlashBlade by using the `pureadmin` command after SSHing to the device as 'p
 
 The exporter accepts the following command line flags:
 
-| Flag                 | Description                                                                                                           | Default |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------- | ------- |
-| --port               | Port on which the exporter will bind to in order to serve up the metrics                                              | 9130    |
-| --insecure           | Disable SSL verification                                                                                              | false   |
-| --filesystem-metrics | Enable per-filesystem performance and user/group metrics (requires FlashBlade API version 1.8)                        | false   |
-| --filesystems        | Regexp of filesystems to gather metrics for (combine with --filesystem-metrics) (requires FlashBlade API version 1.8) | `.*`    |
+| Flag                       | Description                                                                                                           | Default |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------- |
+| --port                     | Port on which the exporter will bind to in order to serve up the metrics                                              | 9130    |
+| --insecure                 | Disable SSL verification                                                                                              | false   |
+| --filesystem-metrics       | Enable per-filesystem performance and user/group metrics (requires FlashBlade API version 1.8)                        | false   |
+| --filesystem-filter-regexp | Regexp of filesystems to gather metrics for (combine with --filesystem-metrics) (requires FlashBlade API version 1.8) | `.*`    |
 
 
 ## Metrics
@@ -149,3 +149,4 @@ Prometheus FlashBlade Exporter has been under development since 2019 and welcome
 * [Michael Captain](https://github.com/macaptain), Man Group
 * [Advait Bhatwdekar](https://github.com/You-NeverKnow), Hudson River Trading LLC
 * [Jeff Patti](https://github.com/jepatti), Man Group
+* [Mike Frost](https://github.com/mifrost), Man Group
