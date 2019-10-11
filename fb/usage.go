@@ -62,8 +62,9 @@ func filterFilesystems(vs []FilesystemsItem, regexMatch string) []FilesystemsIte
     return vsf
 }
 
-// By default this function makes a call for every filesystem, which can take a significant amount
-// of time. This can be limited with the --filesystem-filter-regexp flag.
+// With the default value of fsFilterFlag, this function makes a call for every filesystem, which
+// can take a significant amount of time. This can be limited with the
+// --filesystem-filter-regexp flag.
 func (fbClient FlashbladeClient) Usage(fsFilterFlag string) (UsageResponse, error) {
 	endpoint := "file-systems"
 	var filesystemsResponse FilesystemsResponse
