@@ -5,6 +5,7 @@ package fb
 
 import (
 	"fmt"
+	"regexp"
 )
 
 type UsageResponse struct {
@@ -50,10 +51,22 @@ type NameID struct {
 	Name string `json:"name"`
 }
 
-func (fbClient FlashbladeClient) Usage() (UsageResponse, error) {
+func FilterFilesystems(vs []FilesystemsItem, regexMatch string) []FilesystemsItem {
+    vsf := make([]FilesystemsItem, 0)
+    for _, v := range vs {
+        matched, _ := regexp.MatchString(regexMatch, v.Name)
+        if matched {
+            vsf = append(vsf, v)
+        }
+    }
+    return vsf
+}
+
+func (fbClient FlashbladeClient) Usage(fsLimitFlag string) (UsageResponse, error) {
 	endpoint := "file-systems"
 	var filesystemsResponse FilesystemsResponse
 	err := fbClient.GetJSON(endpoint, nil, &filesystemsResponse)
+	filteredFs := FilterFilesystems(filesystemsResponse.Items, fsLimitFlag)
 
 	if err != nil {
 		fmt.Println("Error while getting JSON")
@@ -65,8 +78,7 @@ func (fbClient FlashbladeClient) Usage() (UsageResponse, error) {
 		usageResponseUser  []UsageUser
 	)
 	params := make(map[string]string)
-
-	for _, item := range filesystemsResponse.Items {
+	for _, item := range filteredFs {
 		params["file_system_names"] = item.Name
 
 		usageResponseGroup = append(usageResponseGroup, UsageGroup{})
