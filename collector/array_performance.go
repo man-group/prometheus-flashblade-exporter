@@ -4,7 +4,7 @@
 package collector
 
 import (
-	"github.com/manahl/prometheus-flashblade-exporter/fb"
+	"github.com/man-group/prometheus-flashblade-exporter/fb"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 )

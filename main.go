@@ -7,8 +7,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/manahl/prometheus-flashblade-exporter/collector"
-	"github.com/manahl/prometheus-flashblade-exporter/fb"
+	"github.com/man-group/prometheus-flashblade-exporter/collector"
+	"github.com/man-group/prometheus-flashblade-exporter/fb"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/version"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"

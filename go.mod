@@ -1,4 +1,4 @@
-module github.com/manahl/prometheus-flashblade-exporter
+module github.com/man-group/prometheus-flashblade-exporter
 
 go 1.12
 
