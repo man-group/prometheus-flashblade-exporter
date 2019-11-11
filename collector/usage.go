@@ -12,17 +12,17 @@ import (
 )
 
 type UsageCollector struct {
-	fbClient *fb.FlashbladeClient
+	fbClient     *fb.FlashbladeClient
 	fsFilterFlag string
-	Usage    *prometheus.Desc
-	Quota    *prometheus.Desc
+	Usage        *prometheus.Desc
+	Quota        *prometheus.Desc
 }
 
 func NewUsageCollector(fbClient *fb.FlashbladeClient, fsFilterFlag string) *UsageCollector {
 	const subsystem = "usagequota"
 
 	return &UsageCollector{
-		fbClient: fbClient,
+		fbClient:     fbClient,
 		fsFilterFlag: fsFilterFlag,
 		Usage: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, subsystem, "memory_usage_bytes"),
@@ -37,6 +37,13 @@ func NewUsageCollector(fbClient *fb.FlashbladeClient, fsFilterFlag string) *Usag
 			prometheus.Labels{"host": fbClient.Host},
 		),
 	}
+}
+
+func applyDefaultQuota(quota int, defaultQuota int) float64 {
+	if quota == 0 {
+		return float64(defaultQuota)
+	}
+	return float64(quota)
 }
 
 func (c UsageCollector) Collect(ch chan<- prometheus.Metric) {
@@ -64,7 +71,7 @@ func (c UsageCollector) collect(ch chan<- prometheus.Metric) error {
 			ch <- prometheus.MustNewConstMetric(
 				c.Quota,
 				prometheus.GaugeValue,
-				float64(data.Quota),
+				applyDefaultQuota(data.Quota, data.FileSystemDefaultQuota),
 				"user", data.User.Name, strconv.FormatInt(int64(data.User.Id), 10), data.FileSystem["name"])
 		}
 	}
@@ -80,7 +87,7 @@ func (c UsageCollector) collect(ch chan<- prometheus.Metric) error {
 			ch <- prometheus.MustNewConstMetric(
 				c.Quota,
 				prometheus.GaugeValue,
-				float64(data.Quota),
+				applyDefaultQuota(data.Quota, data.FileSystemDefaultQuota),
 				"group", data.Group.Name, strconv.FormatInt(int64(data.Group.Id), 10), data.FileSystem["name"])
 		}
 	}
