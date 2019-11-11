@@ -55,6 +55,11 @@ func (c UsageCollector) collect(ch chan<- prometheus.Metric) error {
 
 	for _, usage := range userUsage {
 		for _, data := range usage.Items {
+            actualUserQuota := data.Quota
+            if actualUserQuota == 0 {
+                actualUserQuota = data.FileSystemDefaultQuota
+            }
+
 			ch <- prometheus.MustNewConstMetric(
 				c.Usage,
 				prometheus.GaugeValue,
@@ -64,13 +69,18 @@ func (c UsageCollector) collect(ch chan<- prometheus.Metric) error {
 			ch <- prometheus.MustNewConstMetric(
 				c.Quota,
 				prometheus.GaugeValue,
-				float64(data.Quota),
+				float64(actualUserQuota),
 				"user", data.User.Name, strconv.FormatInt(int64(data.User.Id), 10), data.FileSystem["name"])
 		}
 	}
 
 	for _, usage := range groupUsage {
 		for _, data := range usage.Items {
+            actualGroupQuota := data.Quota
+            if actualGroupQuota == 0 {
+                actualGroupQuota = data.FileSystemDefaultQuota
+            }
+
 			ch <- prometheus.MustNewConstMetric(
 				c.Usage,
 				prometheus.GaugeValue,
@@ -80,7 +90,7 @@ func (c UsageCollector) collect(ch chan<- prometheus.Metric) error {
 			ch <- prometheus.MustNewConstMetric(
 				c.Quota,
 				prometheus.GaugeValue,
-				float64(data.Quota),
+				float64(actualGroupQuota),
 				"group", data.Group.Name, strconv.FormatInt(int64(data.Group.Id), 10), data.FileSystem["name"])
 		}
 	}
