@@ -65,7 +65,7 @@ func NewArraySpaceCollector(fbClient *fb.FlashbladeClient) *ArraySpaceCollector 
 
 func (c ArraySpaceCollector) Collect(ch chan<- prometheus.Metric) {
 	if err := c.collect(ch); err != nil {
-		log.Error("Failed collecting array performance metrics", err)
+		log.Error("Failed collecting array space metrics", err)
 	}
 }
 

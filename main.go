@@ -20,7 +20,7 @@ var (
 	fsMetricFlag   = kingpin.Flag("filesystem-metrics", "Export filesystem and usage data metrics for each user and group.").Default("false").Bool()
 	fsFilterFlag   = kingpin.Flag("filesystem-filter-regexp", "Regexp limiting the filesystems for which metrics are exported").Default(".*").String()
 	insecureFlag   = kingpin.Flag("insecure", "Disable the verification of the SSL certificate").Default("false").Bool()
-	apiVersionFlag = kingpin.Flag("api-version", "API version to query the flashblade").Default("1.7").String()
+	apiVersionFlag = kingpin.Flag("api-version", "API version to query the flashblade").Default("1.8").String()
 )
 
 func init() {
