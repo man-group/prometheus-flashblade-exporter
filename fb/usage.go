@@ -52,14 +52,14 @@ type NameID struct {
 }
 
 func filterFilesystems(vs []FilesystemsItem, regexMatch string) []FilesystemsItem {
-    vsf := make([]FilesystemsItem, 0)
-    for _, v := range vs {
-        matched, _ := regexp.MatchString(regexMatch, v.Name)
-        if matched {
-            vsf = append(vsf, v)
-        }
-    }
-    return vsf
+	vsf := make([]FilesystemsItem, 0)
+	for _, v := range vs {
+		matched, _ := regexp.MatchString(regexMatch, v.Name)
+		if matched {
+			vsf = append(vsf, v)
+		}
+	}
+	return vsf
 }
 
 // With the default value of fsFilterFlag, this function makes a call for every filesystem, which
