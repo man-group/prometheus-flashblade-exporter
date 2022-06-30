@@ -23,6 +23,29 @@ type FSPerformanceItem struct {
 	WriteBytesPerSec float64 `json:"write_bytes_per_sec"`
 }
 
+type FS struct {
+	FileSystem struct {
+		Name         string `json:"name"`
+		Id           string `json:"id"`
+		ResourceType string `json:"resource_type"`
+	} `json:"file_system"`
+}
+
+type FSUser struct {
+	User struct {
+		Name string `json:"name"`
+		Id   int    `json:"id"`
+	} `json:"user"`
+}
+
+type FSUserPerformanceResp struct {
+	Items []struct {
+		FSPerformanceItem
+		FS
+		FSUser
+	} `json:"items"`
+}
+
 func (fbClient FlashbladeClient) FSPerformance() (FSPerformanceResponse, error) {
 	endpoint := "file-systems/performance"
 
@@ -32,4 +55,31 @@ func (fbClient FlashbladeClient) FSPerformance() (FSPerformanceResponse, error) 
 	var fsPerformance FSPerformanceResponse
 	err := fbClient.GetJSON(endpoint, params, &fsPerformance)
 	return fsPerformance, err
+}
+
+// FSPerformanceByUser returns per user, per file system NFS counters
+func (fbClient FlashbladeClient) FSPerformanceByUser() ([]FSUserPerformanceResp, error) {
+	fsU := []FSUserPerformanceResp{}
+	// we first need to get the list of file systems
+	filesystems, err := fbClient.Filesystems()
+	if err != nil {
+		return fsU, err
+	}
+
+	endpoint := "file-systems/users/performance"
+
+	for _, f := range filesystems.Items {
+		params := make(map[string]string)
+		params["protocol"] = "nfs" // Only NFS supported as of API 1.8
+		params["file_system_names"] = f.Name
+		fs := &FSUserPerformanceResp{}
+
+		err := fbClient.GetJSON(endpoint, params, fs)
+		if err != nil {
+			return fsU, err
+		}
+		fsU = append(fsU, *fs)
+	}
+
+	return fsU, nil
 }
