@@ -7,7 +7,6 @@ import (
 	"sync"
 
 	"github.com/man-group/prometheus-flashblade-exporter/fb"
-
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -50,8 +49,9 @@ func NewFlashbladeCollector(fbClient *fb.FlashbladeClient, fsMetricFlag bool, fs
 	if fsMetricFlag {
 		usageCollector := NewUsageCollector(fbClient, fsFilterFlag)
 		fsPerformanceCollector := NewFSPerformanceCollector(fbClient)
+		fSByUserPerformanceCollector := NewFSByUserPerformanceCollector(fbClient)
 
-		subcollectors = append(subcollectors, usageCollector, fsPerformanceCollector)
+		subcollectors = append(subcollectors, usageCollector, fsPerformanceCollector, fSByUserPerformanceCollector)
 	}
 
 	return &FlashbladeCollector{subcollectors: subcollectors}
